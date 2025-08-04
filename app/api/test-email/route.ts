@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
     }
 
     const { data, error } = await resend.emails.send({
-      from: 'HKS Media <noreply@hksmediasolutions.com>',
+      from: 'HKS Media <noreply@hksmediagroup.com>',
       to: ['abdulhadi@hksmediasolutions.com'],
       subject: 'Test Email - HKS Media Website',
       text: `

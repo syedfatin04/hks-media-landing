@@ -39,7 +39,7 @@ Submitted at: ${new Date().toISOString()}
       const resend = new Resend(process.env.RESEND_API_KEY)
       
       const { data, error } = await resend.emails.send({
-        from: 'HKS Media <noreply@hksmediasolutions.com>',
+        from: 'HKS Media <noreply@hksmediagroup.com>',
         to: ['abdulhadi@hksmediasolutions.com'],
         subject: subject,
         text: emailBody,
