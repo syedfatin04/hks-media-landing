@@ -20,8 +20,8 @@ export function FloatingElements() {
     { Icon: Lightbulb, delay: 4.5, x: "90%", y: "30%", size: "h-6 w-6", color: "text-yellow-400" },
   ]
 
-  // Reduce number of elements on mobile for better performance
-  const displayIcons = isMobile ? icons.slice(0, 6) : icons
+  // Reduce number of elements and animation complexity on mobile for better performance
+  const displayIcons = isMobile ? icons.slice(0, 3) : icons
 
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">

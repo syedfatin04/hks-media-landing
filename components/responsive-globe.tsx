@@ -18,20 +18,32 @@ function AnimatedGlobe() {
     }
   })
 
+  // Lower geometry and effects for mobile
+  const sphereArgs: [number, number, number] = isMobile ? [1, 32, 64] : [1, 100, 200]
+  const distort = isMobile ? 0.2 : 0.4
+  const speed = isMobile ? 0.8 : 1.8
+  const metalness = isMobile ? 0.5 : 0.9
+  const roughness = isMobile ? 0.3 : 0.1
+
+  // Optionally, hide globe on very small screens
+  if (typeof window !== 'undefined' && window.innerWidth < 400) {
+    return null
+  }
+
   return (
-    <Float speed={2} rotationIntensity={1} floatIntensity={2}>
+    <Float speed={isMobile ? 1 : 2} rotationIntensity={isMobile ? 0.5 : 1} floatIntensity={isMobile ? 1 : 2}>
       <Sphere 
         ref={meshRef} 
-        args={[1, 100, 200]} 
-        scale={isMobile ? 1.2 : 1.8}
+        args={sphereArgs} 
+        scale={isMobile ? 1.1 : 1.8}
       >
         <MeshDistortMaterial
           color="#3b82f6"
           attach="material"
-          distort={0.4}
-          speed={1.8}
-          roughness={0.1}
-          metalness={0.9}
+          distort={distort}
+          speed={speed}
+          roughness={roughness}
+          metalness={metalness}
         />
       </Sphere>
     </Float>

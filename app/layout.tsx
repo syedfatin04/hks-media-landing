@@ -4,9 +4,9 @@ import { GeistMono } from 'geist/font/mono'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'v0 App',
-  description: 'Created with v0',
-  generator: 'v0.dev',
+  title: 'HKSMEDIA',
+  description: 'The only influencer marketing agency exclusively focused on wearable tech brands. We connect you with creators who actually convert customers.',
+  generator: 'HKSMEDIA',
 }
 
 export default function RootLayout({

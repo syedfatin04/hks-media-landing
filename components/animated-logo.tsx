@@ -54,7 +54,7 @@ export function AnimatedLogo({ className = "" }: { className?: string }) {
           HKS Media
         </motion.span>
         <motion.span className="text-sm text-slate-500 -mt-1" animate={{ opacity: isHovered ? 1 : 0.7 }}>
-          Influence Experts
+          Wearable Tech Specialists
         </motion.span>
       </motion.div>
     </motion.div>

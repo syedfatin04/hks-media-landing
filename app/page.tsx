@@ -31,6 +31,7 @@ import {
   Twitter,
   Linkedin,
   Youtube,
+  Facebook,
   Quote,
   BarChart3,
   Lightbulb,
@@ -95,6 +96,33 @@ export default function HKSMediaLanding() {
     return () => clearTimeout(timer)
   }, [])
 
+  // Add mobile-friendly button styles
+  useEffect(() => {
+    const style = document.createElement('style')
+    style.textContent = `
+      @media (max-width: 640px) {
+        button, .btn, [role="button"] {
+          min-width: 44px !important;
+          min-height: 44px !important;
+          font-size: 1rem !important;
+          padding: 0.75rem 1.25rem !important;
+          z-index: 10 !important;
+          position: relative !important;
+          touch-action: manipulation !important;
+        }
+        .pointer-events-none {
+          pointer-events: none !important;
+        }
+      }
+    `
+    document.head.appendChild(style)
+    return () => {
+      if (document.head.contains(style)) {
+        document.head.removeChild(style)
+      }
+    }
+  }, [])
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({
       ...formData,
@@ -148,30 +176,52 @@ export default function HKSMediaLanding() {
     }
   }
 
+  // Replace scrollToForm with offset scroll for mobile
   const scrollToForm = () => {
-    document.getElementById("launch-pack-form")?.scrollIntoView({ behavior: "smooth" })
+    const el = document.getElementById("launch-pack-form")
+    if (el) {
+      const yOffset = window.innerWidth < 640 ? -24 : 0 // offset for mobile sticky nav
+      const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset
+      window.scrollTo({ top: y, behavior: "smooth" })
+    }
+  }
+
+  // Enhanced scroll function with better mobile support
+  const handleScrollToForm = (e: React.MouseEvent | React.TouchEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    
+    // Add a small delay to ensure any animations complete
+    setTimeout(() => {
+      const el = document.getElementById("launch-pack-form")
+      if (el) {
+        const yOffset = window.innerWidth < 640 ? -32 : -16 // increased offset for mobile
+        const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset
+        window.scrollTo({ top: y, behavior: "smooth" })
+      }
+    }, 100)
   }
 
   const testimonials = [
     {
-      name: "Sarah Chen",
-      role: "CMO at TechWear Pro",
+      name: "Alexandra Martinez",
+      role: "CMO at TechFlow Solutions",
       content:
         "HKS Media delivered exactly what they promised. We saw a 340% increase in qualified leads within the first month of working with their recommended influencers.",
       rating: 5,
       image: "/placeholder.svg?height=60&width=60",
     },
     {
-      name: "Marcus Rodriguez",
-      role: "Founder of FitTech Solutions",
+      name: "David Thompson",
+      role: "Founder of FitSync Pro",
       content:
         "The influencer strategy was spot-on. Not only did we get great creators, but the content ideas they provided went viral. Best ROI we've ever seen.",
       rating: 5,
       image: "/placeholder.svg?height=60&width=60",
     },
     {
-      name: "Emily Watson",
-      role: "Marketing Director at WearableX",
+      name: "Jennifer Park",
+      role: "Marketing Director at WearTech Innovations",
       content:
         "Finally, an agency that understands wearable tech. The influencers they matched us with actually knew our products and created authentic content.",
       rating: 5,
@@ -181,7 +231,7 @@ export default function HKSMediaLanding() {
 
   const caseStudies = [
     {
-      brand: "Apollo Neuro",
+      brand: "NeuroFlow Tech",
       challenge: "Low brand awareness in wellness space",
       solution: "Partnered with 8 wellness micro-influencers",
       result: "450% increase in brand mentions, 280% boost in sales",
@@ -189,7 +239,7 @@ export default function HKSMediaLanding() {
       color: "from-green-500 to-emerald-600",
     },
     {
-      brand: "Ultrahuman",
+      brand: "BioSync Solutions",
       challenge: "Competing with established fitness brands",
       solution: "Targeted fitness enthusiasts and biohackers",
       result: "Generated 50K+ qualified leads in 3 months",
@@ -197,13 +247,28 @@ export default function HKSMediaLanding() {
       color: "from-blue-500 to-cyan-600",
     },
     {
-      brand: "TechWear Co",
+      brand: "TechVibe Innovations",
       challenge: "Reaching tech-savvy early adopters",
       solution: "Collaborated with tech reviewers and gadget enthusiasts",
       result: "Achieved 15M+ impressions with 8.5% engagement rate",
       metric: "15M+",
       color: "from-purple-500 to-indigo-600",
     },
+  ]
+
+  const targetBrands = [
+    "Apollo Neuro",
+    "Flo Mattress", 
+    "Ultrahuman",
+    "Atovio",
+    "Innergize",
+    "Seven Ring",
+    "TechWear Co",
+    "FitTech",
+    "WearOS",
+    "SmartBand",
+    "HealthTech",
+    "BioWear"
   ]
 
   const stats = [
@@ -288,7 +353,7 @@ export default function HKSMediaLanding() {
 
   return (
     <SmoothScrollProvider>
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 overflow-x-hidden">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 overflow-hidden">
       {/* Enhanced Navigation */}
       <motion.nav
         initial={{ y: -100 }}
@@ -487,13 +552,13 @@ export default function HKSMediaLanding() {
                 >
                   <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                     <Button
-                      onClick={scrollToForm}
+                      onClick={handleScrollToForm}
+                      onTouchEnd={handleScrollToForm}
                       size="lg"
-                      className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-700 hover:via-indigo-700 hover:to-purple-700 text-sm sm:text-base md:text-lg px-4 sm:px-6 md:px-10 py-4 sm:py-6 md:py-7 shadow-2xl shadow-purple-500/25 w-full sm:w-auto"
+                      className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-base sm:text-lg px-4 sm:px-8 py-4 sm:py-6 w-full sm:w-auto relative z-10"
                     >
-                      <Rocket className="mr-2 sm:mr-3 h-4 w-4 sm:h-5 sm:w-5" />
-                      Claim Your Launch Pack
-                      <ArrowRight className="ml-2 sm:ml-3 h-4 w-4 sm:h-5 sm:w-5" />
+                      Skip the Struggle - Get Results Now
+                      <ArrowRight className="ml-2 h-5 w-5" />
                     </Button>
                   </motion.div>
 
@@ -501,7 +566,7 @@ export default function HKSMediaLanding() {
                     <Button
                       variant="outline"
                       size="lg"
-                      className="border-2 border-purple-200 text-purple-700 hover:bg-purple-50 text-sm sm:text-base md:text-lg px-4 sm:px-6 md:px-10 py-4 sm:py-6 md:py-7 bg-white/80 backdrop-blur-sm w-full sm:w-auto"
+                      className="border-2 border-purple-200 text-purple-700 hover:bg-purple-50 text-base sm:text-lg px-4 sm:px-6 md:px-10 py-4 sm:py-6 md:py-7 bg-white/80 backdrop-blur-sm w-full sm:w-auto"
                       onClick={() => {
                         const phoneNumber = "+971506916419"
                         const message = "Hi Abdul Hadi! I'm interested in your influencer marketing services for my wearable tech brand. I found you through the HKS Media website."
@@ -682,9 +747,10 @@ export default function HKSMediaLanding() {
               </p>
               <motion.div whileHover={{ scale: 1.05 }}>
                 <Button
-                  onClick={scrollToForm}
+                  onClick={handleScrollToForm}
+                  onTouchEnd={handleScrollToForm}
                   size="lg"
-                  className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-lg px-8 py-6"
+                  className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-base sm:text-lg px-4 sm:px-8 py-4 sm:py-6 w-full sm:w-auto relative z-10"
                 >
                   Skip the Struggle - Get Results Now
                   <ArrowRight className="ml-2 h-5 w-5" />
@@ -943,6 +1009,45 @@ export default function HKSMediaLanding() {
               </ScrollAnimation>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Target Brands Section */}
+      <section className="py-20 px-4 bg-gradient-to-br from-slate-50 to-blue-50">
+        <div className="container mx-auto max-w-6xl">
+          <ScrollAnimation>
+            <div className="text-center mb-16">
+              <h2 className="text-4xl sm:text-5xl font-bold text-slate-900 mb-6">
+                We'd Love to Work With These Brands
+              </h2>
+              <p className="text-lg sm:text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
+                These innovative companies are leading the wearable tech revolution. We're ready to help them scale their influencer marketing efforts.
+              </p>
+            </div>
+          </ScrollAnimation>
+
+          <ScrollAnimation delay={0.2}>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 sm:gap-6">
+              {targetBrands.map((brand, index) => (
+                <motion.div
+                  key={index}
+                  className="bg-white rounded-2xl p-4 sm:p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-slate-200"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                  whileHover={{ scale: 1.05, y: -5 }}
+                >
+                  <div className="text-center">
+                    <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                      <Rocket className="h-6 w-6 sm:h-8 sm:w-8 text-blue-600" />
+                    </div>
+                    <h3 className="font-semibold text-slate-900 text-sm sm:text-base">{brand}</h3>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </ScrollAnimation>
         </div>
       </section>
 
@@ -1293,18 +1398,18 @@ export default function HKSMediaLanding() {
           <ScrollAnimation delay={0.3}>
             <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8 items-center">
               {[
-                "Apollo Neuro",
-                "Flo Mattress",
-                "Ultrahuman",
-                "Atovio",
-                "Innergize",
-                "Seven Ring",
-                "TechWear Co",
-                "FitTech",
-                "WearOS",
-                "SmartBand",
-                "HealthTech",
-                "BioWear",
+                "NeuroFlow Tech",
+                "SleepSync Pro",
+                "BioSync Solutions",
+                "VitalTech Labs",
+                "EnergyBoost Systems",
+                "RingTech Innovations",
+                "TechVibe Innovations",
+                "FitSync Pro",
+                "WearTech OS",
+                "SmartBand Pro",
+                "HealthSync Tech",
+                "BioWear Solutions",
               ].map((brand, index) => (
                 <motion.div
                   key={brand}
@@ -1722,14 +1827,15 @@ export default function HKSMediaLanding() {
                 </p>
                 <div className="flex gap-4">
                   {[
-                    { icon: Instagram, href: "#" },
-                    { icon: Twitter, href: "#" },
-                    { icon: Linkedin, href: "#" },
-                    { icon: Youtube, href: "#" },
+                    { icon: Instagram, href: "https://www.instagram.com/hksmediagroup?igsh=ZzljcTFkNjQ1MDk2&utm_source=qr" },
+                    { icon: Facebook, href: "https://www.facebook.com/share/1AvYr2E5sJ/?mibextid=wwXIfr" },
+                    { icon: Twitter, href: "https://x.com/hksmediagroup?s=21" },
                   ].map((social, index) => (
                     <motion.a
                       key={index}
                       href={social.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="bg-slate-800 p-3 rounded-xl hover:bg-blue-600 transition-colors"
                       whileHover={{ scale: 1.1, rotate: 5 }}
                       whileTap={{ scale: 0.95 }}
@@ -1792,7 +1898,7 @@ export default function HKSMediaLanding() {
                   <div className="flex items-start gap-3">
                     <MapPin className="h-5 w-5 text-blue-400 mt-1" />
                     <span className="text-slate-300">
-                      San Francisco, CA
+                      Dubai, UAE
                       <br />
                       Remote-First Company
                     </span>
@@ -1835,6 +1941,20 @@ export default function HKSMediaLanding() {
                   Cookie Policy
                 </motion.a>
               </div>
+            </div>
+            <div className="text-center pt-4 border-t border-slate-800 mt-4">
+              <p className="text-slate-400 text-sm">
+                Made by{" "}
+                <motion.a 
+                  href="https://www.saqrsoftware.com/" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-blue-400 hover:text-blue-300 transition-colors font-medium"
+                  whileHover={{ scale: 1.05 }}
+                >
+                  Saqr Software Solutions
+                </motion.a>
+              </p>
             </div>
           </div>
         </div>
